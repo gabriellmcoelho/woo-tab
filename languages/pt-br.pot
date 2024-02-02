@@ -1,0 +1,23 @@
+# Portuguese (Brazil) translations for Your Plugin
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: pt_BR\n"
+
+msgid "Quick Access Settings"
+msgstr "Configurações de Acesso Rápido"
+
+msgid "Enable Orders Shortcut"
+msgstr "Ativar Atalho de Pedidos"
+
+msgid "Enable Products Shortcut"
+msgstr "Ativar Atalho de Produtos"
+
+msgid "Enable Coupons Shortcut"
+msgstr "Ativar Atalho de Cupons"
+
+msgid "Enable POS Shortcut"
+msgstr "Ativar Atalho de POS"
+
+msgid "Enable Shipping Shortcut"
+msgstr "Ativar Atalho de Envios"

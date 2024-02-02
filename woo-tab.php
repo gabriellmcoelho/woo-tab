@@ -3,7 +3,7 @@
 Plugin Name: Quick Access For Woocommerce
 Plugin URI: https://github.com/gabriellmcoelho/woo-tab
 Description: This plugin adds WooCommerce and POS shortcuts
-Version: 1.2.2
+Version: 1.2.3
 License: GPLv2 or later
 Author: Gabriel Coelho
 Author URI: https://gabriellmcoelho.space/
@@ -25,7 +25,7 @@ add_action('admin_menu', 'woo_add_plugin_menu');
 function quick_access_settings_page() {
     ?>
     <div class="wrap">
-        <h1>Quick Access Settings</h1>
+        <h1><?php _e('Quick Access Settings', 'quick-access-settings'); ?></h1>
         <form method="post" action="options.php">
             <?php
             settings_fields('quick_access_settings_group');
@@ -34,15 +34,6 @@ function quick_access_settings_page() {
             ?>
         </form>
     </div>
-    <script>
-        // Script to check checkboxes based on saved options
-        document.addEventListener('DOMContentLoaded', function () {
-            var checkboxes = document.querySelectorAll('.checkbox-enable');
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = checkbox.value === '1';
-            });
-        });
-    </script>
     <?php
 }
 
@@ -72,8 +63,7 @@ function quick_access_section_callback() {
 // Checkbox field callback with a class for easier selection
 function quick_access_checkbox_callback($args) {
     $option_name = $args['label_for'];
-    $option_value = get_option($option_name, 0); // Set default value to 0 if not exists
-
+    $option_value = get_option($option_name);
     ?>
     <input type="checkbox" class="checkbox-enable" id="<?php echo esc_attr($args['label_for']); ?>" name="<?php echo esc_attr($option_name); ?>" <?php checked(1, $option_value, true); ?> value="1" />
     <label for="<?php echo esc_attr($args['label_for']); ?>">Enable</label>
@@ -150,3 +140,26 @@ function woo_tabs($wp_admin_bar) {
     }
 }
 add_action('admin_bar_menu', 'woo_tabs', 999);
+
+// Open settings page on plugin activation or update
+function woo_open_settings_on_activation() {
+    // Set the activation flag
+    update_option('woo_open_settings_on_activation', true);
+}
+register_activation_hook(__FILE__, 'woo_open_settings_on_activation');
+
+// Redirect to settings page after activation or update
+function woo_redirect_to_settings() {
+    // Check if the activation flag is set
+    if (get_option('woo_open_settings_on_activation', false)) {
+        // Remove the activation flag
+        delete_option('woo_open_settings_on_activation');
+        // Redirect to the settings page
+        wp_redirect(admin_url('admin.php?page=quick_access_settings'));
+        exit;
+    }
+}
+add_action('admin_init', 'woo_redirect_to_settings');
+
+// Load plugin text domain for internationalization
+load_plugin_textdomain('quick-access-settings', false, dirname(plugin_basename(__FILE__)) . '/languages/');
